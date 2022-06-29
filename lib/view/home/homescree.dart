@@ -12,54 +12,58 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  getBrData() async {
-    List breweries = [];
-    var response =
-        await http.get(Uri.https('api.openbrewerydb.org', 'breweries'));
-    var jsonData = jsonDecode(response.body);
-    // print(response.body);
-    for (var i in jsonData) {
-      Welcome welcome = Welcome(
-        id: i['id'],
-        name: i['name'],
-        breweryType: i['breweryType'],
-        // city: i['city'],
-        // state: i['state'],
-        // country: i['country'],
-        // postalCode: i['postalCode'],
-        // phone: i['phone'],
-        // street: i['street'],
-        // websiteUrl: i['website'],
-      );
-      breweries.add(welcome);
-    }
-    print(breweries);
-    return breweries;
+  fetchUsers() async {
+    var response = await http.get(
+      Uri.https('api.openbrewerydb.org', 'breweries'),
+    );
+    return jsonDecode(response.body);
   }
 
+// @override
+// void initState() {
+//    response = fetchUsers();
+//   super.initState();
+// }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: FutureBuilder(
-          future: getBrData(),
-          builder: ((context, snapshot) {
-            if (snapshot.hasError) {
-              return Container(
-                child: Text('Error'),
-              );
-            }else return ListView.builder(
-              itemCount: snapshot.hasData.toString().length,
-              itemBuilder: (BuildContext, i){
-                  return ListTile(
-                    title: Text(snapshot.hasData.toString()),
-                  );
-            })
-          }),
+        appBar: AppBar(
+          title: Text('Breweries'),
+          centerTitle: true,
         ),
-      ),
-    );
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: FutureBuilder(
+            future: fetchUsers(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              title: Text(snapshot.data[index]['name'] + " "),
+                              trailing: Text(
+                                  snapshot.data[index]['brewery_type'] + ''),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ));
   }
 }
