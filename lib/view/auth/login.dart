@@ -14,7 +14,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   TextEditingController emailController =
-      TextEditingController(text: 'moiza261@gmail.com');
+      TextEditingController(text: 'ahmadmoiz859@gmail.com');
   TextEditingController passwordController =
       TextEditingController(text: 'Moiz@1234');
   Controllers controllers = Controllers();
@@ -124,27 +124,27 @@ class _LoginState extends State<Login> {
                   height: 30,
                 ),
                 ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          fixedSize: const Size(240, 40),
-                          shape: const StadiumBorder(
-                            side: BorderSide.none,
-                          ),
-                        ),
-                        onPressed: () {
-                          try {
-                            controllers.signIn(
-                                emailController.text, passwordController.text);
-                            setState(() {
-                              emailController.text = '';
-                              passwordController.text = '';
-                            });
-                          } on FirebaseAuthException catch (e) {
-                            Get.snackbar(e.toString(), e.toString());
-                          }
-                        },
-                        child: const Text('Login'),
-                      ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.black,
+                    fixedSize: const Size(240, 40),
+                    shape: const StadiumBorder(
+                      side: BorderSide.none,
+                    ),
+                  ),
+                  onPressed: () {
+                    try {
+                      controllers.signIn(
+                          emailController.text, passwordController.text);
+                      setState(() {
+                        emailController.text = '';
+                        passwordController.text = '';
+                      });
+                    } on FirebaseAuthException catch (e) {
+                      Get.snackbar(e.toString(), e.toString());
+                    }
+                  },
+                  child: const Text('Login'),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
